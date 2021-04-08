@@ -2,17 +2,11 @@ const { httpGet } = require("./mock-http-interface");
 
 const getHttpResult = async (url) => {
   const res = await httpGet(url);
-
   // Optional chaining in higher version node
   // const message = JSON.parse(res?.body ?? "{}").message;
   const message = JSON.parse((res && res.body) || "{}").message;
-
-  const result =
-    res.status === 200
-      ? { "Arnie Quote": message }
-      : {
-          FAILURE: message,
-        };
+  const key = res.status === 200 ? "Arnie Quote" : "FAILURE";
+  const result = { [key]: message };
   return Promise.resolve(result);
 };
 
